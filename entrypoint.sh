@@ -9,7 +9,7 @@ log() {
     echo -e "\x1b[1;32m$1\e[0m $2"
 }
 
-filename=$1
+filename="${RUNNER_WORKSPACE}$1"
 
 log "File Name:" "$filename"
 
