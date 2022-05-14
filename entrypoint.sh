@@ -31,7 +31,7 @@ fi
 log "File Content:" "\n$content"
 
 git fetch --tags --force
-latestVersionTag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+latestVersionTag=$(git describe --exact-match --tags 2> /dev/null || git rev-parse --short HEAD)
 
 log "Replacing placeholder with:" "$latestVersionTag"
 
