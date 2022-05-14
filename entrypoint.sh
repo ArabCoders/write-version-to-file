@@ -25,6 +25,8 @@ if test -f "$filename"; then
     content=$(cat "$filename")
 else
     error "Version file not found! Looked for:" "$filename"
+    ls "${RUNNER_WORKSPACE}"
+    find .
     exit 1;
 fi
 
