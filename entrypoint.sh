@@ -28,8 +28,6 @@ else
     exit 1;
 fi
 
-log "File Content:" "\n$content"
-
 git fetch --tags --force
 latestVersionTag=$(git describe --exact-match --tags 2> /dev/null || git rev-parse --short HEAD)
 
@@ -37,5 +35,3 @@ log "Replacing placeholder with:" "$latestVersionTag"
 
 updatedContent=$(< "$filename" sed "s/$placeholder/$latestVersionTag/g")
 echo "$updatedContent" > "$filename"
-
-log "Updated File Content:" "\n$updatedContent"
