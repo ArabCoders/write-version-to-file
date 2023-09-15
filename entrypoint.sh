@@ -2,21 +2,21 @@
 set -eo pipefail
 
 error() {
-    echo -e "\x1b[1;31m$1\e[0m $2"
+    echo -e "\x1b[1;31m${1}\e[0m ${2}"
 }
 
 log() {
-    echo -e "\x1b[1;32m$1\e[0m $2"
+    echo -e "\x1b[1;32m${1}\e[0m ${2}"
 }
 
-filename="/github/workspace/$1"
+filename="/github/workspace/${1}"
 
 log "File Name:" "${filename}"
 
-if [ -z "$2" ]; then
+if [ -z "${2}" ]; then
     placeholder="\${VERSION}"
 else
-    placeholder=$2
+    placeholder=${2}
 fi
 
 log "Placeholder:" "${placeholder}"
@@ -32,7 +32,7 @@ git fetch --tags --force
 latestVersionTag=$(git describe --exact-match --tags 2> /dev/null || git rev-parse --short HEAD)
 userTag="$(date -u +'%Y%m%d')-${latestVersionTag}"
 
-log "Replacing placeholder with: $(userTag)"
+log "Replacing placeholder with: ${userTag}"
 
 updatedContent=$(< "$filename" sed "s/${placeholder}/${userTag}/g")
 echo "${updatedContent}" > "${filename}"
