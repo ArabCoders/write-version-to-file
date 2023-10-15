@@ -41,6 +41,7 @@ if [ "${NO_DATE}" -eq 0 ]; then
     userTag="$(date -u +'%Y%m%d')-${latestVersionTag}"
 else
     userTag="${latestVersionTag}"
+fi
 
 log "Replacing placeholder with: ${userTag}"
 
