@@ -20,9 +20,9 @@ else
 fi
 
 if [ -z "${3}" ]; then
-    NO_DATE=1
+    NO_DATE='false'
 else
-    NO_DATE=0
+    NO_DATE={$3}
 fi
 
 log "Placeholder:" "${placeholder}"
@@ -37,10 +37,10 @@ fi
 git fetch --tags --force
 latestVersionTag=$(git describe --exact-match --tags 2> /dev/null || git rev-parse --short HEAD)
 
-if [ "${NO_DATE}" -eq 0 ]; then
-    userTag="$(date -u +'%Y%m%d')-${latestVersionTag}"
-else
+if [ "${NO_DATE}" == 'true' ]; then
     userTag="${latestVersionTag}"
+else
+    userTag="$(date -u +'%Y%m%d')-${latestVersionTag}"
 fi
 
 log "Replacing placeholder with: ${userTag}"

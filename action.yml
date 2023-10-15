@@ -1,5 +1,5 @@
 name: 'Write Version to File'
-author: 'Brett Dorrans'
+author: 'Abdulmohsen'
 description: 'A GitHub Action that fetches the latest release tag within a repo and writes this to a file'
 inputs:
   filename:
@@ -9,12 +9,22 @@ inputs:
     description: 'The placeholder to replace with latest git tag'
     required: false
     default: '${VERSION}'
+  no_date:
+    description: 'If you dont want the date in the version tag'
+    type: choice
+    required: false
+    default: 'false'
+    options:
+      - true
+      - false
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.filename }}
     - ${{ inputs.placeholder }}
+    - ${{ inputs.no_date }}
 branding:
   icon: 'hash'
   color: 'orange'
