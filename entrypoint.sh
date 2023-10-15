@@ -26,6 +26,7 @@ else
 fi
 
 log "Placeholder:" "${placeholder}"
+log "NO Date:" "${NO_DATE}"
 
 if test -f "${filename}"; then
     content=$(cat "${filename}")
