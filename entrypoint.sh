@@ -22,7 +22,7 @@ fi
 if [ -z "${3}" ]; then
     NO_DATE='false'
 else
-    NO_DATE={$3}
+    NO_DATE=${3}
 fi
 
 log "Placeholder:" "${placeholder}"
