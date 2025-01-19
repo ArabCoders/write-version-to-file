@@ -55,13 +55,21 @@ else
 fi
 
 # If branch prefixing is enabled, retrieve the branch name and prefix the userTag.
-if [ "${WITH_BRANCH}" = 'true' ]; then
-    branchName=$(echo "$GITHUB_REF" | sed 's#refs/heads/##')
+if [ "${BRANCH_PREFIX}" = 'true' ]; then
+    # If on a pull request, use GITHUB_HEAD_REF for the branch name.
+    # Otherwise, parse the branch name from GITHUB_REF.
+    if [ -n "$GITHUB_HEAD_REF" ]; then
+        branchName="$GITHUB_HEAD_REF"
+    else
+        branchName=$(echo "$GITHUB_REF" | sed 's|refs/heads/||')
+    fi
+
+    # Prefix userTag with the branch name.
     userTag="${branchName}-${userTag}"
 fi
 
 log "Replacing placeholder with: ${userTag}"
 
 # Use sed to replace the placeholder with the new tag.
-updatedContent=$(sed "s/${placeholder}/${userTag}/g" "$filename")
+updatedContent=$(sed "s|${placeholder}|${userTag}|g" "$filename")
 echo "${updatedContent}" >"${filename}"
