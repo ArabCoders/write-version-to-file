@@ -1,6 +1,9 @@
 #!/bin/sh
 set -eo pipefail
 
+# Mark the workspace as a safe directory for Git
+git config --global --add safe.directory /github/workspace
+
 error() {
     echo -e "\x1b[1;31m${1}\e[0m ${2}"
 }
