@@ -21,7 +21,7 @@ else
 fi
 
 if [ -z "${3}" ]; then
-    WITH_DATE='false'
+    WITH_DATE='true'
 else
     WITH_DATE=${3}
 fi
