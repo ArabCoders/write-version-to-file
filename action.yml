@@ -9,10 +9,10 @@ inputs:
     description: "The placeholder to replace with latest git tag"
     required: false
     default: "${VERSION}"
-  no_date:
+  with_date:
     description: "If you dont want the date in the version tag"
     required: false
-    default: "false"
+    default: "true"
   with_branch:
     description: "Prefix the version with the branch name."
     required: false
@@ -24,7 +24,7 @@ runs:
   args:
     - ${{ inputs.filename }}
     - ${{ inputs.placeholder }}
-    - ${{ inputs.no_date }}
+    - ${{ inputs.with_date }}
     - ${{ inputs.with_branch }}
 branding:
   icon: "hash"

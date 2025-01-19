@@ -14,8 +14,6 @@ log() {
 
 filename="/github/workspace/${1}"
 
-log "File Name:" "${filename}"
-
 if [ -z "${2}" ]; then
     placeholder="\${VERSION}"
 else
@@ -23,9 +21,9 @@ else
 fi
 
 if [ -z "${3}" ]; then
-    NO_DATE='false'
+    WITH_DATE='false'
 else
-    NO_DATE=${3}
+    WITH_DATE=${3}
 fi
 
 if [ -z "${4}" ]; then
@@ -34,9 +32,10 @@ else
     WITH_BRANCH=${4}
 fi
 
-log "Placeholder:" "${placeholder}"
-log "NO Date:" "${NO_DATE}"
-log "Branch Prefix:" "${WITH_BRANCH}"
+log "File Name  : ${filename}"
+log "Placeholder: ${placeholder}"
+log "Date       : ${WITH_DATE}"
+log "Branch     : ${WITH_BRANCH}"
 
 if test -f "${filename}"; then
     content=$(cat "${filename}")
@@ -46,30 +45,24 @@ else
 fi
 
 git fetch --tags --force
-latestVersionTag=$(git describe --exact-match --tags 2>/dev/null || git rev-parse --short HEAD)
+VERSION_TAG=$(git describe --exact-match --tags 2>/dev/null || git rev-parse --short HEAD)
 
-if [ "${NO_DATE}" = 'true' ]; then
-    userTag="${latestVersionTag}"
-else
-    userTag="$(date -u +'%Y%m%d')-${latestVersionTag}"
+if [ "${WITH_DATE}" = 'true' ]; then
+    VERSION_TAG="$(date -u +'%Y%m%d')-${VERSION_TAG}"
 fi
 
-# If branch prefixing is enabled, retrieve the branch name and prefix the userTag.
 if [ "${BRANCH_PREFIX}" = 'true' ]; then
-    # If on a pull request, use GITHUB_HEAD_REF for the branch name.
-    # Otherwise, parse the branch name from GITHUB_REF.
     if [ -n "$GITHUB_HEAD_REF" ]; then
         branchName="$GITHUB_HEAD_REF"
     else
         branchName=$(echo "$GITHUB_REF" | sed 's|refs/heads/||')
     fi
 
-    # Prefix userTag with the branch name.
-    userTag="${branchName}-${userTag}"
+    VERSION_TAG="${branchName}-${VERSION_TAG}"
 fi
 
-log "Replacing placeholder with: ${userTag}"
+log "Replacing placeholder with: '${VERSION_TAG}'"
 
 # Use sed to replace the placeholder with the new tag.
-updatedContent=$(sed "s|${placeholder}|${userTag}|g" "$filename")
+updatedContent=$(sed "s|${placeholder}|${VERSION_TAG}|g" "$filename")
 echo "${updatedContent}" >"${filename}"
