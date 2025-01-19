@@ -1,30 +1,31 @@
-name: 'Write Version to File'
-author: 'Abdulmohsen'
-description: 'A GitHub Action that fetches the latest release tag within a repo and writes this to a file'
+name: "Write Version to File"
+author: "Abdulmohsen"
+description: "A GitHub Action that fetches the latest release tag within a repo and writes this to a file"
 inputs:
   filename:
-    description: 'The filename to write the version tag to'
+    description: "The filename to write the version tag to"
     required: true
   placeholder:
-    description: 'The placeholder to replace with latest git tag'
+    description: "The placeholder to replace with latest git tag"
     required: false
-    default: '${VERSION}'
+    default: "${VERSION}"
   no_date:
-    description: 'If you dont want the date in the version tag'
-    type: choice
+    description: "If you dont want the date in the version tag"
     required: false
-    default: 'false'
-    options:
-      - true
-      - false
+    default: "false"
+  with_branch:
+    description: "Prefix the version with the branch name."
+    required: false
+    default: "false"
 
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: "docker"
+  image: "Dockerfile"
   args:
     - ${{ inputs.filename }}
     - ${{ inputs.placeholder }}
     - ${{ inputs.no_date }}
+    - ${{ inputs.with_branch }}
 branding:
-  icon: 'hash'
-  color: 'orange'
+  icon: "hash"
+  color: "orange"
