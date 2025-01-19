@@ -48,10 +48,12 @@ git fetch --tags --force
 VERSION_TAG=$(git describe --exact-match --tags 2>/dev/null || git rev-parse --short HEAD)
 
 if [ "${WITH_DATE}" = 'true' ]; then
+    log "Adding date to version tag"
     VERSION_TAG="$(date -u +'%Y%m%d')-${VERSION_TAG}"
 fi
 
-if [ "${BRANCH_PREFIX}" = 'true' ]; then
+if [ "${WITH_BRANCH}" = 'true' ]; then
+    log "Adding branch name to version tag"
     if [ -n "$GITHUB_HEAD_REF" ]; then
         branchName="$GITHUB_HEAD_REF"
     else
@@ -61,7 +63,7 @@ if [ "${BRANCH_PREFIX}" = 'true' ]; then
     VERSION_TAG="${branchName}-${VERSION_TAG}"
 fi
 
-log "Replacing placeholder with: '${VERSION_TAG}'"
+log "Replacing placeholder '${placeholder}' with '${VERSION_TAG}'."
 
 # Use sed to replace the placeholder with the new tag.
 updatedContent=$(sed "s|${placeholder}|${VERSION_TAG}|g" "$filename")
